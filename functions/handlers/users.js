@@ -1,8 +1,9 @@
-const { db } = require('../util/admin');
+const { admin, db } = require('../util/admin');
 
 const config = require('../util/config');
 
-const firebase = require('firebase').initializeApp(config);
+const firebase = require('firebase');
+firebase.initializeApp(config);
 
 const { validateSignupData, validateLoginData } = require('../util/validators');
 
@@ -17,8 +18,6 @@ exports.signup = (req, res) => {
   const { valid, errors } = validateSignupData(newUser);
 
   if (!valid) return res.status(400).json(errors);
-
-  console.log({ newUser });
 
   let token, userId;
   db.doc(`/users/${newUser.handle}`)
