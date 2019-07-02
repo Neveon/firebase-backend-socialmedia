@@ -129,7 +129,6 @@ exports.getAuthenticatedUser = (req, res) => {
       if (doc.exists) {
         // Check existence or else app crashes
         userData.credentials = doc.data();
-        console.log(userData);
         return db
           .collection('likes'.where('userHandle', '==', req.user.handle))
           .get();
