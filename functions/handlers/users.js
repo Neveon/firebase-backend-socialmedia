@@ -123,16 +123,15 @@ exports.addUserDetails = (req, res) => {
 exports.getAuthenticatedUser = (req, res) => {
   let userData = {}; // response data
 
-  db.doc(`/user/${req.user.handle}`)
+  db.doc(`/users/${req.user.handle}`)
     .get()
     .then(doc => {
-      if (doc.exists) {
-        // Check existence or else app crashes
-        userData.credentials = doc.data();
-        return db
-          .collection('likes'.where('userHandle', '==', req.user.handle))
-          .get();
-      }
+      // Credentials holds user info
+      userData.credentials = doc.data();
+      return db
+        .collection('likes')
+        .where('userHandle', '==', req.user.handle)
+        .get();
     })
     .then(data => {
       userData.likes = [];
