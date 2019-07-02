@@ -121,13 +121,16 @@ exports.uploadImage = (req, res) => {
     // Obtaining image extension, like png or jpg
     const imageExtension = filename.split('.')[filename.split('.').length - 1];
     // new random filename to avoid malicious values that could be a relative path outside of destination directory
-    const imageFileName = `${Math.round(
+    imageFileName = `${Math.round(
       Math.random() * 100000
     ).toString()}.${imageExtension}`;
     const filepath = path.join(os.tmpdir(), imageFileName);
     imageToBeUploaded = { filepath, mimetype };
     file.pipe(fs.createWriteStream(filepath));
     file.on('error', err => {});
+  });
+  busboy.on('error', err => {
+    console.error(err);
   });
   busboy.on('finish', () => {
     admin
