@@ -9,7 +9,10 @@ const {
   getAllThoughts,
   postOneThought,
   getThought,
-  commentOnThought
+  commentOnThought,
+  likeThought,
+  unlikeThought,
+  deleteThought
 } = require('./handlers/thoughts');
 const {
   signup,
@@ -23,10 +26,9 @@ const {
 app.get('/thoughts', getAllThoughts);
 app.post('/thought', FBAuth, postOneThought);
 app.get('/thought/:thoughtId', getThought);
-// TODO: delete thought
-// TODO: like a thought
-// TODO: unliking a thought
-// TODO: comment on thought
+app.delete('/thought/:thoughtId', FBAuth, deleteThought);
+app.get('/thought/:thoughtId/like', FBAuth, likeThought);
+app.get('/thought/:thoughtId/unlike', FBAuth, unlikeThought);
 app.post('/thought/:thoughtId/comment', FBAuth, commentOnThought);
 
 // Users route
