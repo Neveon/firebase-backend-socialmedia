@@ -40,3 +40,65 @@ exports.postOneThought = (req, res) => {
       console.error(err);
     });
 };
+
+// Fetching thought
+exports.getThought = (req, res) => {
+  let thoughtData = {};
+  db.doc(`/thoughts/${req.params.thoughtId}`)
+    .get()
+    .then(doc => {
+      if (!doc.exists) {
+        return res.status(404).json({ error: 'Thought not found' });
+      }
+      thoughtData = doc.data();
+      thoughtData.thoughtId = doc.id;
+      return db
+        .collection('comments')
+        .orderBy('createdAt', 'desc') // query requires index
+        .where('thoughtId', '==', req.params.thoughtId)
+        .get();
+    })
+    .then(data => {
+      // array of comments
+      thoughtData.comments = [];
+      data.forEach(doc => {
+        thoughtData.comments.push(doc.data());
+      });
+      return res.json(thoughtData);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+
+// Comment on a thought
+exports.commentOnThought = (req, res) => {
+  if (req.body.body.trim() === '')
+    return res.status(400).json({ error: 'Must not be empty' });
+
+  const newComment = {
+    body: req.body.body,
+    createdAt: new Date().toISOString(),
+    thoughtId: req.params.thoughtId,
+    // from FBAuth middleware
+    userHandle: req.user.handle,
+    userImage: req.user.imageUrl
+  };
+
+  db.doc(`/thoughts/${req.params.thoughtId}`)
+    .get()
+    .then(doc => {
+      if (!doc.exists) {
+        return res.status(404).json({ error: 'Thought not found' });
+      }
+      return db.collection('comments').add(newComment);
+    })
+    .then(() => {
+      res.json(newComment); // returned back to user, for UI
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Something went wrong' });
+    });
+};

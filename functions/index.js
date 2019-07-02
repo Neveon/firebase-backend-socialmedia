@@ -1,12 +1,16 @@
 const functions = require('firebase-functions');
-
 //const express = require('express');
 //const app = express();
 const app = require('express')();
 
 const FBAuth = require('./util/fbAuth');
 
-const { getAllThoughts, postOneThought } = require('./handlers/thoughts');
+const {
+  getAllThoughts,
+  postOneThought,
+  getThought,
+  commentOnThought
+} = require('./handlers/thoughts');
 const {
   signup,
   login,
@@ -18,6 +22,12 @@ const {
 // Thought route
 app.get('/thoughts', getAllThoughts);
 app.post('/thought', FBAuth, postOneThought);
+app.get('/thought/:thoughtId', getThought);
+// TODO: delete thought
+// TODO: like a thought
+// TODO: unliking a thought
+// TODO: comment on thought
+app.post('/thought/:thoughtId/comment', FBAuth, commentOnThought);
 
 // Users route
 app.post('/signup', signup);
