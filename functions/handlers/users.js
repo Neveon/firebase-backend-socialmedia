@@ -135,12 +135,9 @@ exports.getAuthenticatedUser = (req, res) => {
     })
     .then(data => {
       userData.likes = [];
-      // Check data undefined, testing in postman w/o created databse
-      if (data !== undefined) {
-        data.forEach(doc => {
-          userData.likes.push(doc.data());
-        });
-      }
+      data.forEach(doc => {
+        userData.likes.push(doc.data());
+      });
       return res.json(userData);
     })
     .catch(err => {
