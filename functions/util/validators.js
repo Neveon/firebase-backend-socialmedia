@@ -23,8 +23,9 @@ exports.validateSignupData = data => {
     errors.confirmPassword = 'Must not be empty';
   if (data.password !== data.confirmPassword)
     errors.confirmPassword = 'Password must match';
-  if (isEmpty(data.handle) && data.handle.trim().indexOf(' ') !== -1)
-    errors.handle = 'Must not be empty or contain whitespace';
+  if (data.handle.trim().indexOf(' ') !== -1)
+    errors.handle = 'Must not contain whitespace';
+  if (isEmpty(data.handle)) errors.handle = 'Must not be empty';
 
   return {
     errors,
