@@ -1,5 +1,5 @@
 # firebase-backend-socialmedia
-Firebase functions for social media app
+Firebase functions for social media app. Front end React app can be found [here](https://github.com/Neveon/firebase-frontend-socialmedia)
 
 ## What I Learned
 - Learned about firebase database triggers and querying
