@@ -67,7 +67,8 @@ exports.createNotificationOnLike = functions.firestore
             sender: snapshot.data().userHandle,
             type: 'like',
             read: false,
-            thoughtId: doc.id
+            thoughtId: doc.id,
+            notificationId: snapshot.id
           });
         }
       })
@@ -104,7 +105,8 @@ exports.createNotificationOnComment = functions.firestore
             sender: snapshot.data().userHandle,
             type: 'comment',
             read: false,
-            thoughtId: doc.id
+            thoughtId: doc.id,
+            notificationId: snapshot.id
           });
         }
       })
